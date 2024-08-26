@@ -13,31 +13,23 @@
     <h1>Investir</h1>
     <nav>
       <ul>
+        <li><a href="http://localhost/farialimabets">Home</a></li>
         <li><a href="http://localhost/farialimabets/pages/chart.php">Gráficos</a></li>
-        <li><a href="http://localhost/farialimabets/pages/balance.php">Investir</a></li>
-        <li><a href="http://localhost/farialimabets/pages/current_data.php">Saldo</a></li>
-        <li><a href="http://localhost/farialimabets/pages/invest.php">Dados Atuais</a></li>
+        <li><a href="http://localhost/farialimabets/pages/invest.php">Investir</a></li>
+        <li><a href="http://localhost/farialimabets/pages/balance.php">Saldo</a></li>
+        <li><a href="http://localhost/farialimabets/pages/current_data.php">Dados Atuais</a></li>
       </ul>
     </nav>
   </header>
   <main>
     <form id="investForm">
-      <label for="ticker">Ticker da Ação:</label>
-      <input type="text" id="ticker" name="ticker">
-
-      <label for="amount">Quantidade:</label>
-      <input type="number" id="amount" name="amount">
-
+      <label for="amount">Quantidade (em USD):</label>
+      <input type="number" id="amount" name="amount" min="1" required>
       <button type="submit">Investir</button>
     </form>
+    <div id="resultMessage"></div>
   </main>
-  <script>
-    document.getElementById('investForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      // Lógica para processar o investimento
-      alert('Investimento realizado com sucesso!');
-    });
-  </script>
+  <script src="/farialimabets/js/invest.js"></script>
 </body>
 
 </html>
