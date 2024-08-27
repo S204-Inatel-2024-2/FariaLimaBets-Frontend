@@ -9,11 +9,12 @@
 </head>
 <style>
     .layout-text {
-        padding: 3rem 18rem;
+        padding: 1rem 15rem;
     }
 
     .color-bk {
         background: #eeeeee30;
+        border-radius: 15px;
     }
 
     h2 {
@@ -35,10 +36,13 @@
         font-weight: 400;
         color: #fff;
         padding: 5px;
+        list-style-type: none;
     }
 
     body {
-        background: #fff url('/FariaLimaBets/images/banner.jpg') no-repeat center center;
+        background: rgb(2, 0, 36);
+        background: linear-gradient(175deg, rgba(2, 0, 36, 1) 0%, rgba(21, 44, 86, 1) 35%, rgba(0, 143, 172, 1) 100%);
+        height: 1000px;
     }
 </style>
 

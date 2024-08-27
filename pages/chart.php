@@ -9,14 +9,18 @@
 </head>
 <style>
   .cn {
-    max-width: 1000px;
+    max-width: 800px;
   }
-  .tl{
+
+  .tl {
     width: 100%;
     text-align: -webkit-center;
   }
+
   body {
-    background: #04040426;
+    background: rgb(2, 0, 36);
+    background: linear-gradient(175deg, rgba(2, 0, 36, 1) 0%, rgba(21, 44, 86, 1) 35%, rgba(0, 143, 172, 1) 100%);
+    height: 900px;
   }
 </style>
 

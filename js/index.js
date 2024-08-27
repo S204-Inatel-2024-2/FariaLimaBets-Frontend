@@ -14,7 +14,8 @@ document.addEventListener("DOMContentLoaded", function () {
             {
               label: "Preço de Fechamento (USD)",
               data: closePrices,
-              borderColor: "rgba(75, 192, 192, 1)",
+              borderColor: "#fff",
+              color: "#fff",
               borderWidth: 1,
               fill: false,
             },
@@ -26,12 +27,20 @@ document.addEventListener("DOMContentLoaded", function () {
               title: {
                 display: true,
                 text: "Dia do mês",
+                color: "#fff",
+              },
+              ticks: {
+                color: "#fff",
               },
             },
             y: {
               title: {
                 display: true,
                 text: "Preço de Fechamento (USD)",
+                color: "#fff",
+              },
+              ticks: {
+                color: "#fff",
               },
             },
           },

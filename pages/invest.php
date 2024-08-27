@@ -20,7 +20,6 @@ function getStockData($apiKey)
 
   return $stocks;
 }
-
 $stocks = getStockData($apiKey);
 ?>
 
@@ -36,7 +35,7 @@ $stocks = getStockData($apiKey);
 </head>
 <style>
   .layout-text {
-    padding: 3rem 15rem 10rem 15rem;
+    padding: 3rem 12rem 10rem 12rem;
     text-align: -webkit-center;
   }
 
@@ -44,23 +43,17 @@ $stocks = getStockData($apiKey);
     background: #eeeeee30;
   }
 
-  .h2text,
-  .balance {
+  .h2text {
     font-size: 22px;
     font-weight: 400;
     color: #fff;
-    padding: 30px;
     letter-spacing: 1px;
-  }
-
-  h2 {
-    font-weight: 400;
-    color: #fff;
-    padding: 30px;
-    letter-spacing: 1px;
+    height: 100px;
+    align-content: center;
   }
 
   h3 {
+    font-size: 25px;
     color: #fff;
   }
 
@@ -81,7 +74,8 @@ $stocks = getStockData($apiKey);
   }
 
   body {
-    background: #fff url('/FariaLimaBets/images/banner2.jpg') no-repeat center center;
+    background: rgb(2, 0, 36);
+    background: linear-gradient(175deg, rgba(2, 0, 36, 1) 0%, rgba(21, 44, 86, 1) 35%, rgba(0, 143, 172, 1) 100%);
   }
 
   /* button */
@@ -118,7 +112,19 @@ $stocks = getStockData($apiKey);
     border: 1px solid rgb(99 102 241);
   }
 
+  .form button:hover {
+    background-color: rgb(10 102 241);
+    transition: 0.3s;
+  }
+
+  .form span,
+  .form input {
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+
   .form button {
+    transition: 0.3s;
     color: #fff;
     font-weight: 600;
     font-size: 0.875rem;
@@ -128,6 +134,15 @@ $stocks = getStockData($apiKey);
     border-radius: 0.375rem;
     border: none;
     outline: none;
+  }
+
+  .ul-res ul {
+    text-align: center;
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .ul-res ul li {
+    margin-bottom: 10px;
   }
 </style>
 
@@ -145,7 +160,7 @@ $stocks = getStockData($apiKey);
   </header>
   <div class="layout-text">
     <div id="balance" class="h2text">
-      <h2> Saldo: $<?php echo $balance; ?></h2>
+      <h2> Saldo: $10.000</h2>
     </div>
     <ul id="stock-list">
       <?php foreach ($stocks as $stock): ?>
@@ -162,10 +177,10 @@ $stocks = getStockData($apiKey);
         </li>
       <?php endforeach; ?>
     </ul>
-    <div>
-      <h2 style="margin-top:50px">Investimentos Realizados</h2>
-      <ul id="investment-list">
-        <!-- Investimentos serão listados aqui -->
+    <div class="ul-res" style="margin-top:70px">
+      <h3>Investimentos Realizados</h3>
+      <ul>
+        <li id="investment-list"></li>
       </ul>
     </div>
   </div>
