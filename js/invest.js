@@ -1,6 +1,6 @@
 let balance = 10000; // Saldo inicial
 
-//atualizar saldo 
+// Atualizar saldo
 function updateBalance(amountSpent) {
   balance -= amountSpent;
   document.getElementById("balance").innerText = `Saldo: $${balance.toFixed(
@@ -10,51 +10,50 @@ function updateBalance(amountSpent) {
   document.getElementById("balance").style.height = "100px";
 }
 
-//calcular o preco por cada ação
-function calculateInvestment(stockSymbol) {
+// Calcular o preço total de ações compradas
+function calculateInvestment(stockSymbol, numShares) {
   const stockPrice = parseFloat(
     document.getElementById(`price_${stockSymbol}`).value
   );
-  const investmentAmount = parseFloat(
-    document.getElementById(`amount_${stockSymbol}`).value
-  );
 
-  if (investmentAmount > 0) {
-    const unitsBought = investmentAmount / stockPrice;
+  if (numShares > 0) {
+    const totalCost = numShares * stockPrice;
     document.getElementById(
       `units_${stockSymbol}`
-    ).innerText = ` Ações compradas: ${unitsBought.toFixed(2)}`;
+    ).innerText = ` Custo total para ${numShares} ações: $${totalCost.toFixed(
+      2
+    )}`;
   } else {
     document.getElementById(`units_${stockSymbol}`).innerText = "";
   }
 }
 
-//investir valor na ação desejada 
-function invest(stockSymbol) {
-  const investmentAmount = parseFloat(
-    document.getElementById(`amount_${stockSymbol}`).value
-  );
+// Investir valor na ação desejada
+function invest(stockSymbol, numShares) {
   const stockPrice = parseFloat(
     document.getElementById(`price_${stockSymbol}`).value
   );
 
-  if (investmentAmount > balance || investmentAmount <= 0) {
-    alert("Valor inválido para investimento.");
+  if (numShares <= 0) {
+    alert("Número de ações inválido.");
     return;
   }
 
-  const unitsBought = investmentAmount / stockPrice;
-  updateBalance(investmentAmount);
+  const totalCost = numShares * stockPrice;
+
+  if (totalCost > balance) {
+    alert("Saldo insuficiente para a compra.");
+    return;
+  }
+
+  updateBalance(totalCost);
 
   const investmentList = document.getElementById("investment-list");
   const listItem = document.createElement("li");
-  listItem.innerText = `Investido $${investmentAmount.toFixed(
+  listItem.innerText = `Comprado ${numShares} ações de ${stockSymbol} (Preço por ação: $${stockPrice.toFixed(
     2
-  )} em ${stockSymbol} (Preço: $${stockPrice.toFixed(
-    2
-  )}, Ações compradas: ${unitsBought.toFixed(4)})`;
+  )}, Custo total: $${totalCost.toFixed(2)})`;
   investmentList.appendChild(listItem);
 
-  document.getElementById(`amount_${stockSymbol}`).value = ""; // Limpa o campo de entrada
-  document.getElementById(`units_${stockSymbol}`).innerText = ""; // Limpa a exibição das ações compradas
+  document.getElementById(`units_${stockSymbol}`).innerText = ""; // Limpa a exibição do custo
 }

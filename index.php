@@ -40,9 +40,13 @@
     }
 
     body {
-        background: rgb(2, 0, 36);
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
         background: linear-gradient(175deg, rgba(2, 0, 36, 1) 0%, rgba(21, 44, 86, 1) 35%, rgba(0, 143, 172, 1) 100%);
-        height: 1000px;
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
     }
 </style>
 

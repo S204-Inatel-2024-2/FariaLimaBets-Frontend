@@ -2,25 +2,55 @@
 $apiKey = "3LcGDlYJGST1jXsimEjh8piuITsoW3Wm";
 $balance = 10000; // Saldo inicial
 
-// Função para obter os dados das empresas relacionadas à AAPL
-function getStockData($apiKey)
+// Função para obter os tickers relacionados à AAPL
+function getRelatedCompanies($apiKey)
 {
-  $url = "https://api.polygon.io/v1/related-companies/AAPL?apiKey=" . $apiKey;
+  $symbol = 'AAPL'; // Símbolo da ação
+  $url = "https://api.polygon.io/v1/related-companies/{$symbol}?apiKey=" . $apiKey;
+
+  $json = file_get_contents($url);
+  $data = json_decode($json, true);
+  $stocks = [];
+  if (isset($data['results'])) {
+    // Limita a 5 tickers
+    $results = array_slice($data['results'], 0, 5);
+    foreach ($results as $stock) {
+      $stocks[] = $stock['ticker'];
+    }
+  }
+  return $stocks;
+}
+
+// Função para obter o preço real de uma ação
+function getStockPrice($apiKey, $symbol)
+{
+  $url = "https://api.polygon.io/v2/aggs/ticker/{$symbol}/prev?apiKey=" . $apiKey;
 
   $json = file_get_contents($url);
   $data = json_decode($json, true);
 
-  $stocks = [];
-  foreach ($data['results'] as $stock) {
+  // Verifica se os dados foram retornados com sucesso
+  if (isset($data['results'][0]['c'])) {
+    return $data['results'][0]['c']; // Preço de fechamento
+  } else {
+    return null; // Retorna null se não conseguir obter o preço
+  }
+}
+
+// Obtém os tickers relacionados
+$tickers = getRelatedCompanies($apiKey);
+
+// Obtém o preço de cada ticker
+$stocks = [];
+foreach ($tickers as $ticker) {
+  $price = getStockPrice($apiKey, $ticker);
+  if ($price !== null) {
     $stocks[] = [
-      'symbol' => $stock['ticker'],
-      'price' => rand(10, 500) // Simulando preços das ações
+      'symbol' => $ticker,
+      'price' => $price
     ];
   }
-
-  return $stocks;
 }
-$stocks = getStockData($apiKey);
 ?>
 
 <!DOCTYPE html>
@@ -63,7 +93,7 @@ $stocks = getStockData($apiKey);
     padding: 0;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 3%;
   }
 
@@ -74,8 +104,13 @@ $stocks = getStockData($apiKey);
   }
 
   body {
-    background: rgb(2, 0, 36);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
     background: linear-gradient(175deg, rgba(2, 0, 36, 1) 0%, rgba(21, 44, 86, 1) 35%, rgba(0, 143, 172, 1) 100%);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
   }
 
   /* button */
@@ -148,7 +183,7 @@ $stocks = getStockData($apiKey);
 
 <body>
   <header>
-    <h1>Investimento - APPL</h1>
+    <h1>Investimento - AAPL</h1>
     <nav>
       <ul>
         <li><a href="http://localhost/farialimabets">Home</a></li>
@@ -160,7 +195,7 @@ $stocks = getStockData($apiKey);
   </header>
   <div class="layout-text">
     <div id="balance" class="h2text">
-      <h2> Saldo: $10.000</h2>
+      <h2>Saldo: $10.000</h2>
     </div>
     <ul id="stock-list">
       <?php foreach ($stocks as $stock): ?>
@@ -168,10 +203,10 @@ $stocks = getStockData($apiKey);
           <div class="form">
             (<?php echo $stock['symbol']; ?>) - Preço por ação: $<?php echo $stock['price']; ?>
             <input type="hidden" id="price_<?php echo $stock['symbol']; ?>" value="<?php echo $stock['price']; ?>" />
-            <input class="" type="number" id="amount_<?php echo $stock['symbol']; ?>" placeholder="Valor a investir" min="0" max="<?php echo $balance; ?>" oninput="calculateInvestment('<?php echo $stock['symbol']; ?>')" />
+            <input class="" type="number" id="shares_<?php echo $stock['symbol']; ?>" placeholder="Número de ações" min="0" value="0" oninput="calculateInvestment('<?php echo $stock['symbol']; ?>', this.value)" />
             <span id="units_<?php echo $stock['symbol']; ?>"></span>
-            <button onclick="invest('<?php echo $stock['symbol']; ?>')">
-              Investir
+            <button onclick="invest('<?php echo $stock['symbol']; ?>', document.getElementById('shares_<?php echo $stock['symbol']; ?>').value)">
+              Comprar
             </button>
           </div>
         </li>
