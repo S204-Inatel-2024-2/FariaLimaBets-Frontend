@@ -15,7 +15,7 @@ $data = json_decode($response, true);
 $results = [];
 foreach ($data['results'] as $dayData) {
   $results[] = [
-    'date' => date('Y-m-d', $dayData['t'] / 1000), // Converte o timestamp para uma data legível
+    'date' => date('d', $dayData['t'] / 1000), // Converte o timestamp para uma data legível
     'close' => $dayData['c'] // Preço de fechamento
   ];
 }

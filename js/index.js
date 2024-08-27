@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
             x: {
               title: {
                 display: true,
-                text: "Data",
+                text: "Dia do mês",
               },
             },
             y: {

@@ -28,7 +28,7 @@
     }
 
     ul {
-        padding: 0 40%;
+        padding: 0 40% 5% 40%;
     }
 
     ul li {
@@ -50,8 +50,7 @@
                 <li><a href="http://localhost/farialimabets">Home</a></li>
                 <li><a href="http://localhost/farialimabets/pages/chart.php">Gráficos</a></li>
                 <li><a href="http://localhost/farialimabets/pages/invest.php">Investir</a></li>
-                <li><a href="http://localhost/farialimabets/pages/balance.php">Saldo</a></li>
-                <li><a href="http://localhost/farialimabets/pages/current_data.php">Dados Atuais</a></li>
+                <!-- <li><a href="http://localhost/farialimabets/pages/current_data.php">Dados Atuais</a></li> -->
             </ul>
         </nav>
     </header>
