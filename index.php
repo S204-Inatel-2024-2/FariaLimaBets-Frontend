@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/styles.css">
     <title>Game Bolsa de Valores</title>
 </head>
+
 <style>
     .layout-text {
         padding: 1rem 15rem;
@@ -58,7 +59,6 @@
                 <li><a href="http://localhost/farialimabets">Home</a></li>
                 <li><a href="http://localhost/farialimabets/pages/chart.php">Gráficos</a></li>
                 <li><a href="http://localhost/farialimabets/pages/invest.php">Investir</a></li>
-                <!-- <li><a href="http://localhost/farialimabets/pages/current_data.php">Dados Atuais</a></li> -->
             </ul>
         </nav>
     </header>

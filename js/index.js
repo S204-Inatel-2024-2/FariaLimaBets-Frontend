@@ -1,5 +1,6 @@
-let stockChart; // Variable to hold the chart instance
+let stockChart; // variavel para armazenar a instância do grafico
 
+//chamada do historico do ultimo ano dos valoes das ações
 async function fetchHistoricalData(symbol) {
   const apiKey = "3LcGDlYJGST1jXsimEjh8piuITsoW3Wm";
   const url = `https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/month/2023-07-01/2024-07-01?apiKey=${apiKey}`;
@@ -8,12 +9,12 @@ async function fetchHistoricalData(symbol) {
   return data.results || [];
 }
 
+//chamanda para carregar o grafico
 async function loadChart() {
   const ticker = document.getElementById("ticker-select").value;
 
   if (!ticker) return;
-
-  // Obtém os dados históricos do ticker selecionado
+  // chamada de função
   const historicalData = await fetchHistoricalData(ticker);
 
   if (!historicalData.length) {
@@ -28,22 +29,22 @@ async function loadChart() {
 
   const ctx = document.getElementById("stock-chart").getContext("2d");
 
-  // Destroy the previous chart instance if it exists
+  // caso ja tenha um grafico apaga
   if (stockChart) {
     stockChart.destroy();
   }
 
-  // Create a new chart instance
+  // cria um novo grafico - layout
   stockChart = new Chart(ctx, {
     type: "line",
     data: {
       labels: labels,
       datasets: [
         {
-          label: `Preço das ações ${ticker}`,
+          label: `Preço das ações do ultimo ano`,
           data: prices,
           borderColor: "rgba(75, 192, 192, 1)",
-          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          backgroundColor: "rgba(75, 102, 192, 0.5)",
           fill: true,
         },
       ],
@@ -56,6 +57,9 @@ async function loadChart() {
             display: true,
             text: "Data",
             color: "#fff",
+            font: {
+              size: 18,
+            },
           },
           ticks: {
             color: "#fff",
@@ -66,9 +70,22 @@ async function loadChart() {
             display: true,
             text: "Preço",
             color: "#fff",
+            font: {
+              size: 18,
+            },
           },
           ticks: {
             color: "#fff",
+          },
+        },
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: "#fff",
+            font: {
+              size: 18,
+            },
           },
         },
       },

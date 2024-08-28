@@ -1,8 +1,8 @@
 <?php
 $apiKey = "3LcGDlYJGST1jXsimEjh8piuITsoW3Wm";
-$balance = 10000; // Saldo inicial
+$balance = 10000; // Saldo inicial pre-definido
 
-// Função para obter os tickers relacionados à AAPL
+/*Função para obter os tickers relacionados à AAPL
 function getRelatedCompanies($apiKey)
 {
   $symbol = 'AAPL'; // Símbolo da ação
@@ -12,20 +12,19 @@ function getRelatedCompanies($apiKey)
   $data = json_decode($json, true);
   $stocks = [];
   if (isset($data['results'])) {
-    // Limita a 5 tickers
+    Limita a 5 tickers
     $results = array_slice($data['results'], 0, 5);
     foreach ($results as $stock) {
       $stocks[] = $stock['ticker'];
     }
   }
   return $stocks;
-}
+} */
 
-// Função para obter o preço real de uma ação
+// Função para obter o preço real de uma ação das 5 empresas
 function getStockPrice($apiKey, $symbol)
 {
   $url = "https://api.polygon.io/v2/aggs/ticker/{$symbol}/prev?apiKey=" . $apiKey;
-
   $json = file_get_contents($url);
   $data = json_decode($json, true);
 
@@ -37,10 +36,9 @@ function getStockPrice($apiKey, $symbol)
   }
 }
 
-// Obtém os tickers relacionados
-$tickers = getRelatedCompanies($apiKey);
-
 // Obtém o preço de cada ticker
+//$tickers = getRelatedCompanies($apiKey);
+$tickers = ['AAPL', 'NVDA', 'AMZN', 'GOOGL', 'MSFT'];
 $stocks = [];
 foreach ($tickers as $ticker) {
   $price = getStockPrice($apiKey, $ticker);
@@ -189,7 +187,6 @@ foreach ($tickers as $ticker) {
         <li><a href="http://localhost/farialimabets">Home</a></li>
         <li><a href="http://localhost/farialimabets/pages/chart.php">Gráficos</a></li>
         <li><a href="http://localhost/farialimabets/pages/invest.php">Investir</a></li>
-        <!-- <li><a href="http://localhost/farialimabets/pages/current_data.php">Dados Atuais</a></li> -->
       </ul>
     </nav>
   </header>
@@ -201,7 +198,7 @@ foreach ($tickers as $ticker) {
       <?php foreach ($stocks as $stock): ?>
         <li>
           <div class="form">
-            (<?php echo $stock['symbol']; ?>) - Preço por ação: $<?php echo $stock['price']; ?>
+            <?php echo $stock['symbol']; ?> - Preço por ação: $<?php echo $stock['price']; ?>
             <input type="hidden" id="price_<?php echo $stock['symbol']; ?>" value="<?php echo $stock['price']; ?>" />
             <input class="" type="number" id="shares_<?php echo $stock['symbol']; ?>" placeholder="Número de ações" min="0" value="0" oninput="calculateInvestment('<?php echo $stock['symbol']; ?>', this.value)" />
             <span id="units_<?php echo $stock['symbol']; ?>"></span>
@@ -213,6 +210,7 @@ foreach ($tickers as $ticker) {
       <?php endforeach; ?>
     </ul>
     <div class="ul-res" style="margin-top:70px">
+      <!-- historico de investimentos -->
       <h3>Investimentos Realizados</h3>
       <ul>
         <li id="investment-list"></li>

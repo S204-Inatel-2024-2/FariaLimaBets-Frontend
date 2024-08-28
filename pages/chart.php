@@ -1,8 +1,9 @@
 <?php
+//cahve da API do polygon.io
 $apiKey = "3LcGDlYJGST1jXsimEjh8piuITsoW3Wm";
 
-// Lista de tickers predefinidos
-$tickers = ['MSFT', 'GOOGL', 'AMZN', 'GOOG', 'TSLA'];
+// Lista de tickers predefinidos - AAPL
+$tickers = ['AAPL', 'NVDA', 'AMZN', 'GOOGL', 'MSFT'];
 
 ?>
 
@@ -98,19 +99,18 @@ $tickers = ['MSFT', 'GOOGL', 'AMZN', 'GOOG', 'TSLA'];
 
 <body>
   <header>
-    <h1>Investimento - AAPL</h1>
+    <h1>Investimento</h1>
     <nav>
       <ul>
         <li><a href="http://localhost/farialimabets">Home</a></li>
         <li><a href="http://localhost/farialimabets/pages/chart.php">Gráficos</a></li>
         <li><a href="http://localhost/farialimabets/pages/invest.php">Investir</a></li>
-        <!-- <li><a href="http://localhost/farialimabets/pages/current_data.php">Dados Atuais</a></li> -->
       </ul>
     </nav>
   </header>
   <div class="container">
     <div class="form">
-      <label for="ticker-select">Selecione um ticker:</label>
+      <label for="ticker-select">Selecione uma empresa:</label>
       <select id="ticker-select">
         <?php foreach ($tickers as $ticker): ?>
           <option value="<?php echo $ticker; ?>"><?php echo $ticker; ?></option>
