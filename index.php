@@ -4,78 +4,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/styles.css">
-    <title>Game Bolsa de Valores</title>
+    <title>Login e Cadastro</title>
+    <link rel="stylesheet" href="css/styles2.css">
+    <script>
+        // Função para cadastrar um novo usuário
+        function cadastrarUsuario() {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            if (!name || !email || !password) {
+                alert("Preencha todos os campos para se cadastrar.");
+                return;
+            }
+
+            fetch('http://localhost:3333/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        password: password
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Erro ao cadastrar usuário.');
+                    }
+                })
+                .then(data => {
+                    alert('Usuário cadastrado com sucesso!');
+                    console.log(data);
+                })
+                .catch(error => {
+                    alert('Ocorreu um erro no cadastro: ' + error.message);
+                    console.error('Erro:', error);
+                });
+        }
+
+        // Função para fazer login
+        function loginUsuario() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                alert("Preencha todos os campos para fazer login.");
+                return;
+            }
+
+            fetch('http://localhost:3333/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Erro ao fazer login.');
+                    }
+                })
+                .then(data => {
+                    // Redirecionar para a página invest.php após o sucesso do login
+                    window.location.href = '/farialimabets/pages/invest.php';
+                })
+                .catch(error => {
+                    alert('Ocorreu um erro no login: ' + error.message);
+                    console.error('Erro:', error);
+                });
+        }
+    </script>
 </head>
 
-<style>
-    .layout-text {
-        padding: 1rem 15rem;
-    }
-
-    .color-bk {
-        background: #eeeeee30;
-        border-radius: 15px;
-    }
-
-    h2 {
-        font-weight: 400;
-        color: #fff;
-        padding: 30px;
-        letter-spacing: 1px;
-    }
-
-    h3 {
-        color: #fff;
-    }
-
-    ul {
-        padding: 0 40% 5% 40%;
-    }
-
-    ul li {
-        font-weight: 400;
-        color: #fff;
-        padding: 5px;
-        list-style-type: none;
-    }
-
-    body {
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        background: linear-gradient(175deg, rgba(2, 0, 36, 1) 0%, rgba(21, 44, 86, 1) 35%, rgba(0, 143, 172, 1) 100%);
-        background-size: cover;
-        background-position: center center;
-        background-repeat: no-repeat;
-    }
-</style>
-
 <body>
-    <header>
-        <h1>Game Bolsa de Valores</h1>
-        <nav>
-            <ul>
-                <li><a href="http://localhost/farialimabets">Home</a></li>
-                <li><a href="http://localhost/farialimabets/pages/chart.php">Gráficos</a></li>
-                <li><a href="http://localhost/farialimabets/pages/invest.php">Investir</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <div class="layout-text">
-            <div class="color-bk">
-                <h2>Bem-vindo ao nosso Jogo de Investimento em Ações! Este jogo foi projetado para proporcionar uma experiência simulada de mercado de ações, onde você pode testar suas habilidades de investimento e aprender mais sobre o mercado financeiro de maneira divertida e interativa.</h2>
-                <h3>Membros:</h3>
-                <ul>
-                    <li>Ana Julia</li>
-                    <li>Luiz Matheus</li>
-                    <li>Lucas Moreira</li>
-                    <li>Marcos Guerra</li>
-                </ul>
-            </div>
+    <div class="wrapper">
+        <div class="card-switch">
+            <label class="switch">
+                <input type="checkbox" class="toggle">
+                <span class="slider"></span>
+                <span class="card-side"></span>
+                <div class="flip-card__inner">
+                    <div class="flip-card__front">
+                        <div class="title">Login</div>
+                        <form class="flip-card__form" onsubmit="event.preventDefault(); loginUsuario();">
+                            <input class="flip-card__input" id="login-email" name="email" placeholder="Email" type="email">
+                            <input class="flip-card__input" id="login-password" name="password" placeholder="Password" type="password">
+                            <button class="flip-card__btn" type="submit">Login!</button>
+                        </form>
+                    </div>
+                    <div class="flip-card__back">
+                        <div class="title">Signup</div>
+                        <form class="flip-card__form" onsubmit="event.preventDefault(); cadastrarUsuario();">
+                            <input class="flip-card__input" id="signup-name" placeholder="Name" type="text">
+                            <input class="flip-card__input" id="signup-email" name="email" placeholder="Email" type="email">
+                            <input class="flip-card__input" id="signup-password" name="password" placeholder="Password" type="password">
+                            <button class="flip-card__btn" type="submit">Singup!</button>
+                        </form>
+                    </div>
+                </div>
+            </label>
         </div>
-    </main>
+    </div>
 </body>
 
 </html>
