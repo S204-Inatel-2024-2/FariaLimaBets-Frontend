@@ -22,10 +22,10 @@ async function loadChart() {
     return;
   }
 
-  const labels = historicalData.map((result) =>
-    new Date(result.t).toLocaleDateString()
+  const labels = historicalData.map(result =>
+    new Date(result.t).toLocaleDateString('pt-BR', { month: 'short' })
   );
-  const prices = historicalData.map((result) => result.c);
+  const prices = historicalData.map(result => result.c);
 
   const ctx = document.getElementById("stock-chart").getContext("2d");
 
@@ -41,13 +41,18 @@ async function loadChart() {
       labels: labels,
       datasets: [
         {
-          label: `Preço das ações do ultimo ano`,
+          label: `Preço das ações do último ano`,
           data: prices,
-          borderColor: "rgba(75, 192, 192, 1)",
-          backgroundColor: "rgba(75, 102, 192, 0.5)",
+          borderColor: "rgba(255, 255, 255, 0.9)",
+          backgroundColor: "rgba(0, 82, 204, 0.5)", // Fundo mais suave
+          pointBackgroundColor: "rgba(255, 255, 255, 0.8)", // Destaque nos pontos
+          pointBorderColor: "#fff",
+          pointRadius: 5,
+          pointHoverRadius: 7, // Aumenta o ponto ao passar o mouse
           fill: true,
-        },
-      ],
+          tension: 0.4 // Linhas mais suaves
+        }
+      ]
     },
     options: {
       responsive: true,
@@ -56,14 +61,21 @@ async function loadChart() {
           title: {
             display: true,
             text: "Data",
-            color: "#fff",
+            color: "#fff", // Cor mais suave para os títulos
             font: {
-              size: 18,
-            },
+              size: 20,
+              family: "Arial"
+            }
           },
           ticks: {
-            color: "#fff",
+            color: "#fff", // Cor dos ticks mais suave
+            font: {
+              size: 14
+            }
           },
+          grid: {
+            color: "rgba(255, 255, 255, 0.1)" // Grade mais discreta
+          }
         },
         y: {
           title: {
@@ -71,24 +83,49 @@ async function loadChart() {
             text: "Preço",
             color: "#fff",
             font: {
-              size: 18,
-            },
+              size: 20,
+              family: "Arial"
+            }
           },
           ticks: {
             color: "#fff",
+            font: {
+              size: 14
+            }
           },
-        },
+          grid: {
+            color: "rgba(255, 255, 255, 0.1)"
+          }
+        }
       },
       plugins: {
         legend: {
           labels: {
             color: "#fff",
             font: {
-              size: 18,
-            },
+              size: 14,
+              family: "Arial"
+            }
           },
+          position: "top" // Move a legenda para o topo
         },
+        tooltip: {
+          backgroundColor: "rgba(0, 0, 0, 0.7)", // Tooltip mais escuro e moderno
+          titleColor: "#fff",
+          bodyColor: "#fff",
+          cornerRadius: 5 // Bordas arredondadas na tooltip
+        }
       },
-    },
+      elements: {
+        line: {
+          borderWidth: 2, // Linhas mais finas
+          borderColor: "rgba(255, 255, 255, 0.9)"
+        }
+      },
+      interaction: {
+        mode: "index",
+        intersect: false // Tooltip mostra os valores ao passar o mouse sem precisar clicar diretamente
+      }
+    }
   });
 }

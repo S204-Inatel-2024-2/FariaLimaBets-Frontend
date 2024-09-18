@@ -22,7 +22,7 @@ $tickers = ['AAPL', 'NVDA', 'AMZN', 'GOOGL', 'MSFT'];
       margin: 0;
       padding: 0;
       min-height: 100vh;
-      background: linear-gradient(175deg, rgba(2, 0, 36, 1) 0%, rgba(21, 44, 86, 1) 35%, rgba(0, 143, 172, 1) 100%);
+      background: linear-gradient(175deg, rgb(6 1 91 / 90%) 0%, rgb(0 33 95 / 100%) 15%, rgb(129 234 255 / 100%) 100%);
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
@@ -37,7 +37,7 @@ $tickers = ['AAPL', 'NVDA', 'AMZN', 'GOOGL', 'MSFT'];
       margin: 1rem auto;
       padding: 1rem;
       max-width: 600px;
-      background: rgba(255, 255, 255, 0.8);
+      background: #99cdff96;
       border-radius: 10px;
     }
 
@@ -58,16 +58,20 @@ $tickers = ['AAPL', 'NVDA', 'AMZN', 'GOOGL', 'MSFT'];
     }
 
     button {
-      transition: 0.3s;
+      transition: all 0.3s;
       color: #fff;
       font-weight: 600;
       font-size: 0.875rem;
       line-height: 1.25rem;
       padding: 0.625rem 0.875rem;
-      background-color: rgb(99 102 241);
-      border-radius: 0.375rem;
-      border: none;
-      outline: none;
+      margin: 10px 40px 10px 40px;
+      height: 40px;
+      border-radius: 5px;
+      border: 2px solid #fff;
+      background-color: rgb(6 1 91 / 90%);
+      box-shadow: 4px 4px #fff;
+      color: #fff;
+      cursor: pointer;
     }
 
     select {
@@ -85,14 +89,14 @@ $tickers = ['AAPL', 'NVDA', 'AMZN', 'GOOGL', 'MSFT'];
     }
 
     button:hover {
-      background-color: rgb(1 72 241);
-      color: #fff;
-      transition: 0.3s;
+      box-shadow: 0 0 0 0 #fff;
+      transform: translate(3px, 3px);
     }
 
     label {
       font-size: 20px;
       font-weight: 400;
+      color: #fff;
     }
   </style>
 </head>
@@ -102,9 +106,10 @@ $tickers = ['AAPL', 'NVDA', 'AMZN', 'GOOGL', 'MSFT'];
     <h1>Investimento</h1>
     <nav>
       <ul>
-        <li><a href="http://localhost/farialimabets">Home</a></li>
+        <!-- <li><a href="http://localhost/farialimabets">Home</a></li> -->
         <li><a href="http://localhost/farialimabets/pages/chart.php">Gráficos</a></li>
         <li><a href="http://localhost/farialimabets/pages/invest.php">Investir</a></li>
+        <li><a href="http://localhost/farialimabets">Sair</a></li>
       </ul>
     </nav>
   </header>

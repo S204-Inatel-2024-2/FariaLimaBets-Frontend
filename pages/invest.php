@@ -2,25 +2,6 @@
 $apiKey = "3LcGDlYJGST1jXsimEjh8piuITsoW3Wm";
 $balance = 10000; // Saldo inicial pre-definido
 
-/*Função para obter os tickers relacionados à AAPL
-function getRelatedCompanies($apiKey)
-{
-  $symbol = 'AAPL'; // Símbolo da ação
-  $url = "https://api.polygon.io/v1/related-companies/{$symbol}?apiKey=" . $apiKey;
-
-  $json = file_get_contents($url);
-  $data = json_decode($json, true);
-  $stocks = [];
-  if (isset($data['results'])) {
-    Limita a 5 tickers
-    $results = array_slice($data['results'], 0, 5);
-    foreach ($results as $stock) {
-      $stocks[] = $stock['ticker'];
-    }
-  }
-  return $stocks;
-} */
-
 // Função para obter o preço real de uma ação das 5 empresas
 function getStockPrice($apiKey, $symbol)
 {
@@ -63,7 +44,7 @@ foreach ($tickers as $ticker) {
 </head>
 <style>
   .layout-text {
-    padding: 3rem 12rem 10rem 12rem;
+    padding: 3rem 7rem 10rem 7rem;
     text-align: -webkit-center;
   }
 
@@ -105,7 +86,7 @@ foreach ($tickers as $ticker) {
     margin: 0;
     padding: 0;
     min-height: 100vh;
-    background: linear-gradient(175deg, rgba(2, 0, 36, 1) 0%, rgba(21, 44, 86, 1) 35%, rgba(0, 143, 172, 1) 100%);
+    background: linear-gradient(175deg, rgb(6 1 91 / 90%) 0%, rgb(0 33 95 / 100%) 15%, rgb(129 234 255 / 100%) 100%);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -119,22 +100,28 @@ foreach ($tickers as $ticker) {
     background: -webkit-linear-gradient(to right, #3f4c6b, #606c88);
     background: linear-gradient(to right, #3f4c6b, #606c88);
     padding: 20px;
-    border-radius: 10px;
     max-width: 350px;
     justify-content: center;
+    border-radius: 5px;
+    border: 2px solid #fff;
+    box-shadow: 4px 4px #fff;
   }
 
   .form input {
     margin: 10px;
-    outline: none;
     line-height: 1.5rem;
     font-size: 0.875rem;
-    color: rgb(255 255 255);
-    padding: 0.5rem 0.875rem;
-    background-color: rgb(255 255 255 / 0.05);
-    border: 1px solid rgba(253, 253, 253, 0.363);
-    border-radius: 0.375rem;
     flex: 1 1 auto;
+    width: 250px;
+    height: 40px;
+    border-radius: 5px;
+    border: 2px solid #fff;
+    background-color: #eee;
+    box-shadow: 4px 4px #fff;
+    font-weight: 600;
+    color: #333;
+    padding: 5px 10px;
+    outline: none;
   }
 
   .form input::placeholder {
@@ -146,8 +133,8 @@ foreach ($tickers as $ticker) {
   }
 
   .form button:hover {
-    background-color: rgb(10 102 241);
-    transition: 0.3s;
+    box-shadow: 0 0 0 0 #fff;
+    transform: translate(3px, 3px);
   }
 
   .form span,
@@ -157,16 +144,20 @@ foreach ($tickers as $ticker) {
   }
 
   .form button {
-    transition: 0.3s;
+    transition: all 0.3s;
     color: #fff;
     font-weight: 600;
     font-size: 0.875rem;
     line-height: 1.25rem;
     padding: 0.625rem 0.875rem;
-    background-color: rgb(99 102 241);
-    border-radius: 0.375rem;
-    border: none;
-    outline: none;
+    margin: 10px 40px 10px 40px;
+    height: 40px;
+    border-radius: 5px;
+    border: 2px solid #fff;
+    background-color: rgb(6 1 91 / 90%);
+    box-shadow: 4px 4px #fff;
+    color: #fff;
+    cursor: pointer;
   }
 
   .ul-res ul {
@@ -184,9 +175,10 @@ foreach ($tickers as $ticker) {
     <h1>Investimento - AAPL</h1>
     <nav>
       <ul>
-        <li><a href="http://localhost/farialimabets">Home</a></li>
+        <!-- <li><a href="http://localhost/farialimabets">Home</a></li> -->
         <li><a href="http://localhost/farialimabets/pages/chart.php">Gráficos</a></li>
         <li><a href="http://localhost/farialimabets/pages/invest.php">Investir</a></li>
+        <li><a href="http://localhost/farialimabets">Sair</a></li>
       </ul>
     </nav>
   </header>
