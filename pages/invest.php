@@ -177,7 +177,7 @@ foreach ($tickers as $ticker) {
       <ul>
         <li><a href="http://localhost/farialimabets/pages/chart.php">Gráficos</a></li>
         <li><a href="http://localhost/farialimabets/pages/invest.php">Investir</a></li>
-        <li><a href="http://localhost/farialimabets/">Sair</a></li>
+        <li><a href="#" onclick="logoutUsuario()">Sair</a></li> <!-- Botão de logout -->
       </ul>
     </nav>
   </header>
@@ -201,12 +201,12 @@ foreach ($tickers as $ticker) {
       <?php endforeach; ?>
     </ul>
 
-    <!-- <div class="ul-res" style="margin-top:70px">
+    <div class="ul-res" style="margin-top:70px">
       <h3>Investimentos Realizados</h3>
       <ul>
         <li id="investment-list"></li>
       </ul>
-    </div> -->
+    </div>
 
     <!-- Nova Div para exibir ações compradas -->
     <div class="ul-res" style="margin-top:70px">

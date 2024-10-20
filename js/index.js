@@ -362,3 +362,12 @@ async function loadChart() {
     },
   });
 }
+
+
+// Função para fazer logout
+function logoutUsuario() {
+    // Limpar o token JWT e outros dados armazenados no localStorage
+
+    // Redirecionar para a página de login ou home
+    window.location.href = "http://localhost/farialimabets/";
+}
