@@ -18,7 +18,6 @@ function getStockPrice($apiKey, $symbol)
 }
 
 // Obtém o preço de cada ticker
-//$tickers = getRelatedCompanies($apiKey);
 $tickers = ['AAPL', 'NVDA', 'AMZN', 'GOOGL', 'MSFT'];
 $stocks = [];
 foreach ($tickers as $ticker) {
@@ -40,8 +39,9 @@ foreach ($tickers as $ticker) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/farialimabets/css/styles.css">
   <title>Investimento em Ações</title>
-  <script src="/farialimabets/js/invest.js"></script>
+  <script src="/farialimabets/js/index.js" defer></script>
 </head>
+
 <style>
   .layout-text {
     padding: 3rem 7rem 10rem 7rem;
@@ -175,24 +175,23 @@ foreach ($tickers as $ticker) {
     <h1>Investimento - AAPL</h1>
     <nav>
       <ul>
-        <!-- <li><a href="http://localhost/farialimabets">Home</a></li> -->
         <li><a href="http://localhost/farialimabets/pages/chart.php">Gráficos</a></li>
         <li><a href="http://localhost/farialimabets/pages/invest.php">Investir</a></li>
-        <li><a href="http://localhost/farialimabets">Sair</a></li>
+        <li><a href="http://localhost/farialimabets/">Sair</a></li>
       </ul>
     </nav>
   </header>
   <div class="layout-text">
     <div id="balance" class="h2text">
-      <h2>Saldo: $10.000</h2>
+      <h2>Saldo: $<?php echo number_format($balance, 2, ',', '.'); ?></h2>
     </div>
     <ul id="stock-list">
       <?php foreach ($stocks as $stock): ?>
         <li>
           <div class="form">
-            <?php echo $stock['symbol']; ?> - Preço por ação: $<?php echo $stock['price']; ?>
+            <?php echo $stock['symbol']; ?> - Preço por ação: $<?php echo number_format($stock['price'], 2, ',', '.'); ?>
             <input type="hidden" id="price_<?php echo $stock['symbol']; ?>" value="<?php echo $stock['price']; ?>" />
-            <input class="" type="number" id="shares_<?php echo $stock['symbol']; ?>" placeholder="Número de ações" min="0" value="0" oninput="calculateInvestment('<?php echo $stock['symbol']; ?>', this.value)" />
+            <input type="number" id="shares_<?php echo $stock['symbol']; ?>" placeholder="Número de ações" min="0" value="0" oninput="calculateInvestment('<?php echo $stock['symbol']; ?>', this.value)" />
             <span id="units_<?php echo $stock['symbol']; ?>"></span>
             <button onclick="invest('<?php echo $stock['symbol']; ?>', document.getElementById('shares_<?php echo $stock['symbol']; ?>').value)">
               Comprar
@@ -201,14 +200,27 @@ foreach ($tickers as $ticker) {
         </li>
       <?php endforeach; ?>
     </ul>
-    <div class="ul-res" style="margin-top:70px">
-      <!-- historico de investimentos -->
+
+    <!-- <div class="ul-res" style="margin-top:70px">
       <h3>Investimentos Realizados</h3>
       <ul>
         <li id="investment-list"></li>
       </ul>
+    </div> -->
+
+    <!-- Nova Div para exibir ações compradas -->
+    <div class="ul-res" style="margin-top:70px">
+      <h3>Ações Compradas</h3>
+      <ul id="shares-list"></ul> <!-- Aqui será exibida a lista de ações -->
     </div>
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      getSaldoUsuario();
+      fetchShares();
+    });
+  </script>
 </body>
 
 </html>

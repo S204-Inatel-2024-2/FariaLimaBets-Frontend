@@ -2,6 +2,8 @@
 //cahve da API do polygon.io
 $apiKey = "3LcGDlYJGST1jXsimEjh8piuITsoW3Wm";
 
+$balance = 10000; // Saldo inicial pre-definido
+
 // Lista de tickers predefinidos - AAPL
 $tickers = ['AAPL', 'NVDA', 'AMZN', 'GOOGL', 'MSFT'];
 
@@ -109,7 +111,7 @@ $tickers = ['AAPL', 'NVDA', 'AMZN', 'GOOGL', 'MSFT'];
         <!-- <li><a href="http://localhost/farialimabets">Home</a></li> -->
         <li><a href="http://localhost/farialimabets/pages/chart.php">Gráficos</a></li>
         <li><a href="http://localhost/farialimabets/pages/invest.php">Investir</a></li>
-        <li><a href="http://localhost/farialimabets">Sair</a></li>
+        <li><a href="http://localhost/farialimabets/">Sair</a></li>
       </ul>
     </nav>
   </header>
