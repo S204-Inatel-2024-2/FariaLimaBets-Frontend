@@ -35,3 +35,60 @@ main {
 h1 {
   font-size: 35px;
 }
+
+/* Estilo para a lista de ações */
+#shares-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 600px;
+}
+
+.share-item {
+  margin-bottom: 10px;
+}
+
+.form {
+  border: 1px solid var(--main-color);
+  padding: 10px;
+  border-radius: 5px;
+  background: rgb(0 143 172 / 42%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sell-input {
+  padding: 5px;
+  width: 70px;
+  border: 2px solid var(--main-color);
+  border-radius: 4px;
+  background-color: var(--bg-color);
+  box-shadow: 4px 4px var(--main-color);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--font-color2);
+  outline: none;
+}
+
+.sell-input::placeholder {
+  color: var(--font-color-sub);
+  opacity: 0.8;
+}
+
+.sell-button {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 2px solid var(--main-color);
+  background-color: var(--bg-color2);
+  color: var(--font-color);
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  box-shadow: 4px 4px var(--main-color);
+}
+
+.sell-button:hover {
+  background-color: var(--input-focus);
+}

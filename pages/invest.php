@@ -1,6 +1,7 @@
 <?php
 $apiKey = "3LcGDlYJGST1jXsimEjh8piuITsoW3Wm";
 $balance = 10000; // Saldo inicial pre-definido
+$shares = [];
 
 // Função para obter o preço real de uma ação das 5 empresas
 function getStockPrice($apiKey, $symbol)
@@ -172,7 +173,7 @@ foreach ($tickers as $ticker) {
 
 <body>
   <header>
-    <h1>Investimento - AAPL</h1>
+    <h1>Investimento</h1>
     <nav>
       <ul>
         <li><a href="http://localhost/farialimabets/pages/chart.php">Gráficos</a></li>
@@ -191,9 +192,9 @@ foreach ($tickers as $ticker) {
           <div class="form">
             <?php echo $stock['symbol']; ?> - Preço por ação: $<?php echo number_format($stock['price'], 2, ',', '.'); ?>
             <input type="hidden" id="price_<?php echo $stock['symbol']; ?>" value="<?php echo $stock['price']; ?>" />
-            <input type="number" id="shares_<?php echo $stock['symbol']; ?>" placeholder="Número de ações" min="0" value="0" oninput="calculateInvestment('<?php echo $stock['symbol']; ?>', this.value)" />
+            <input type="number" id="shares_<?php echo $stock['symbol']; ?>" placeholder="Número de ações" min="0" value="0" oninput="calculateInvestment('<?php echo $stock['symbol']; ?>', parseInt(this.value, 10))" />
             <span id="units_<?php echo $stock['symbol']; ?>"></span>
-            <button onclick="invest('<?php echo $stock['symbol']; ?>', document.getElementById('shares_<?php echo $stock['symbol']; ?>').value)">
+            <button onclick="invest('<?php echo $stock['symbol']; ?>', parseInt(document.getElementById('shares_<?php echo $stock['symbol']; ?>').value, 10))">
               Comprar
             </button>
           </div>
@@ -202,17 +203,18 @@ foreach ($tickers as $ticker) {
     </ul>
 
     <div class="ul-res" style="margin-top:70px">
-      <h3>Investimentos Realizados</h3>
+      <h3>Ações Compradas</h3>
+      <ul id="shares-list">
+      </ul>
+    </div>
+
+    <div class="ul-res" style="margin-top:70px">
+      <h3 style="color:transparent">Investimentos Realizados</h3>
       <ul>
         <li id="investment-list"></li>
       </ul>
     </div>
 
-    <!-- Nova Div para exibir ações compradas -->
-    <div class="ul-res" style="margin-top:70px">
-      <h3>Ações Compradas</h3>
-      <ul id="shares-list"></ul> <!-- Aqui será exibida a lista de ações -->
-    </div>
   </div>
 
   <script>

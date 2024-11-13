@@ -148,6 +148,8 @@ function calculateInvestment(stockSymbol, numShares) {
 
 // Função para investir em ações
 async function invest(stockSymbol, numShares) {
+  numShares = parseInt(numShares, 10); // Garante que numShares seja um número inteiro
+
   const token = localStorage.getItem("jwt_token");
 
   if (!token) {
@@ -155,9 +157,7 @@ async function invest(stockSymbol, numShares) {
     return;
   }
 
-  const stockPrice = parseFloat(
-    document.getElementById(`price_${stockSymbol}`).value
-  );
+  const stockPrice = parseFloat(document.getElementById(`price_${stockSymbol}`).value);
   const totalCost = stockPrice * numShares;
 
   if (numShares <= 0 || isNaN(totalCost)) {
@@ -194,12 +194,13 @@ async function invest(stockSymbol, numShares) {
       throw new Error("Erro ao comprar ações.");
     }
 
-    const investmentList = document.getElementById("investment-list");
-    const investmentItem = document.createElement("li");
-    investmentItem.innerText = `Você comprou ${numShares} ações de ${stockSymbol} por $${totalCost.toFixed(
-      2
-    )}`;
-    investmentList.appendChild(investmentItem);
+    // Exibe a mensagem de investimento bem-sucedido
+    const investmentMessage = `Você comprou ${numShares} ações de ${stockSymbol} por $${totalCost.toFixed(2)}`;
+    alert(investmentMessage);
+
+    // Atualiza a lista de ações compradas
+    fetchShares(); // Atualiza a lista de ações na interface
+
   } catch (error) {
     alert("Erro: " + error.message);
   }
@@ -231,7 +232,7 @@ async function fetchShares() {
 
     // Verifica se as ações foram listadas com sucesso
     if (data.code === 200 && data.message_code === "LISTED") {
-      displayShares(data.data);
+      displayShares(data.data); // Exibe as ações na interface
     } else {
       console.error(data.message);
     }
@@ -240,22 +241,77 @@ async function fetchShares() {
   }
 }
 
-// Função para exibir as ações na tela
+// Função para exibir as ações na interface
 function displayShares(shares) {
   const sharesList = document.getElementById("shares-list");
-  sharesList.innerHTML = ""; // Limpa a lista antes de adicionar novos itens
+  sharesList.innerHTML = ""; // Limpa a lista
 
+  // Itera sobre as ações e exibe a quantidade atualizada corretamente
   shares.forEach((share) => {
     const shareItem = document.createElement("li");
-    shareItem.innerText = `Empresa: ${
-      share.company
-    }, Valor Total: $${share.total_value
-      .toFixed(2)
-      .replace(".", ",")}, Preço de Compra: $${share.purchase_price
-      .toFixed(2)
-      .replace(".", ",")}, Quantidade: ${share.quantity}`;
+    shareItem.classList.add("share-item"); // Adiciona uma classe para o item da lista
+
+    shareItem.innerHTML = `
+      <div class="form">
+        Empresa: ${share.company} <br>
+        Quantidade: ${share.quantity} <br>
+        Valor Total: $${share.total_value.toFixed(2).replace(".", ",")} <br>
+        <input type="number" class="sell-input" id="sell_quantity_${share.company}" placeholder="Qtd para vender" min="1" max="${share.quantity}">
+        <button class="sell-button" onclick="sellShares('${share.company}', document.getElementById('sell_quantity_${share.company}').value, ${share.purchase_price})">
+          Vender
+        </button>
+      </div>
+    `;
+
     sharesList.appendChild(shareItem);
   });
+}
+
+// Função para vender ações
+async function sellShares(company, quantity, price) {
+  const token = localStorage.getItem("jwt_token");
+  if (!token) {
+    alert("Usuário não autenticado.");
+    return;
+  }
+
+  quantity = parseInt(quantity);
+
+  if (isNaN(quantity) || quantity <= 0) {
+    alert("Insira uma quantidade válida para venda.");
+    return;
+  }
+
+  const payload = {
+    quantity: quantity,
+    value: price * quantity,
+    company: company,
+  };
+
+  try {
+    const response = await fetch("http://localhost:3333/sell-shares", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      alert(`Venda de ${quantity} ações da ${company} realizada com sucesso.`);
+
+      // Atualiza a lista de ações e o saldo do usuário após a venda
+      fetchShares();
+      getSaldoUsuario();
+    } else {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Erro ao vender ações.");
+    }
+  } catch (error) {
+    alert("Erro ao vender ações: " + error.message);
+  }
 }
 // =============================== GRÁFICO ===============================
 
@@ -363,11 +419,15 @@ async function loadChart() {
   });
 }
 
-
-// Função para fazer logout
 function logoutUsuario() {
-    // Limpar o token JWT e outros dados armazenados no localStorage
+  // Remove o token dos locais de armazenamento
+  localStorage.removeItem("jwt_token");
+  sessionStorage.removeItem("jwt_token");
 
-    // Redirecionar para a página de login ou home
-    window.location.href = "http://localhost/farialimabets/";
+  // Caso o token esteja em um cookie, remova-o também (opcional)
+  document.cookie =
+    "jwt_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+  // Redireciona o usuário para a página de login
+  window.location.href = "http://localhost/farialimabets/";
 }
