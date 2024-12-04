@@ -1,208 +1,218 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <title>Investimento em Ações</title>
+    <script src="/js/index.js" defer></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/css/styles.css">
-  <title>Investimento em Ações</title>
-  <script src="/js/index.js" defer></script>
-</head>
-
-<style>
-  .layout-text {
-    padding: 3rem 7rem 10rem 7rem;
-    text-align: -webkit-center;
-  }
-
-  .color-bk {
-    background: #eeeeee30;
-  }
-
-  .h2text {
-    font-size: 22px;
-    font-weight: 400;
-    color: #fff;
-    letter-spacing: 1px;
-    height: 100px;
-    align-content: center;
-  }
-
-  h3 {
-    font-size: 25px;
-    color: #fff;
-  }
-
-  .layout-text ul {
-    padding: 0 10% 5% 10%;
-    justify-items: center;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 3%;
-  }
-
-  ul li {
-    font-weight: 400;
-    color: #fff;
-    padding: 5px;
-  }
-
-  body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    background: linear-gradient(175deg, rgb(6 1 91 / 90%) 0%, rgb(0 33 95 / 100%) 15%, rgb(129 234 255 / 100%) 100%);
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-  }
-
-  /* button */
-  .form {
-    display: grid;
-    flex-direction: column;
-    background: #606c88;
-    background: -webkit-linear-gradient(to right, #3f4c6b, #606c88);
-    background: linear-gradient(to right, #3f4c6b, #606c88);
-    padding: 20px;
-    max-width: 350px;
-    justify-content: center;
-    border-radius: 5px;
-    border: 2px solid #fff;
-    box-shadow: 4px 4px #fff;
-  }
-
-  .form input {
-    margin: 10px;
-    line-height: 1.5rem;
-    font-size: 0.875rem;
-    flex: 1 1 auto;
-    width: 250px;
-    height: 40px;
-    border-radius: 5px;
-    border: 2px solid #fff;
-    background-color: #eee;
-    box-shadow: 4px 4px #fff;
-    font-weight: 600;
-    color: #333;
-    padding: 5px 10px;
-    outline: none;
-  }
-
-  .form input::placeholder {
-    color: rgb(216, 212, 212);
-  }
-
-  .form input:focus {
-    border: 1px solid rgb(99 102 241);
-  }
-
-  .form button:hover {
-    box-shadow: 0 0 0 0 #fff;
-    transform: translate(3px, 3px);
-  }
-
-  .form span,
-  .form input {
-    margin-bottom: 10px;
-    margin-top: 10px;
-  }
-
-  .form button {
-    transition: all 0.3s;
-    color: #fff;
-    font-weight: 600;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    padding: 0.625rem 0.875rem;
-    margin: 10px 40px 10px 40px;
-    height: 40px;
-    border-radius: 5px;
-    border: 2px solid #fff;
-    background-color: rgb(6 1 91 / 90%);
-    box-shadow: 4px 4px #fff;
-    color: #fff;
-    cursor: pointer;
-  }
-
-  .ul-res ul {
-    text-align: center;
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .ul-res ul li {
-    margin-bottom: 10px;
-    max-width: 400px;
-  }
-</style>
-
-<body>
-  <header>
-    <h1>Investimento</h1>
-    <nav>
-      <ul>
-        <li><a href="/pages/chart.html">Gráficos</a></li>
-        <li><a href="/pages/invest.html">Investir</a></li>
-        <li><a href="#" onclick="logoutUsuario()">Sair</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <div class="layout-text">
-    <div id="balance" class="h2text">
-      <h2>Carregando saldo...</h2>
-    </div>
-    <ul id="stock-list"></ul>
-
-    <div class="ul-res" style="margin-top:70px">
-      <h3>Ações Compradas</h3>
-      <ul id="shares-list">
-      </ul>
-    </div>
-
-    <div class="ul-res" style="margin-top:70px">
-      <h3 style="color:transparent">Investimentos Realizados</h3>
-      <ul>
-        <li id="investment-list"></li>
-      </ul>
-    </div>
-  </div>
-
-  <script>
-    const apiKey = "3LcGDlYJGST1jXsimEjh8piuITsoW3Wm";
-    const tickers = ['AAPL', 'NVDA', 'AMZN', 'GOOGL', 'MSFT'];
-
-    // Função para buscar os preços das ações
-    async function getStockPrice(symbol) {
-      const url = `https://api.polygon.io/v2/aggs/ticker/${symbol}/prev?apiKey=${apiKey}`;
-      try {
-        const response = await fetch(url);
-        const data = await response.json();
-        if (data?.results?.[0]?.c) {
-          return data.results[0].c; // Preço de fechamento
-        }
-        return null;
-      } catch (error) {
-        console.error(`Erro ao buscar o preço de ${symbol}:`, error);
-        return null;
-      }
+  <style>
+    .layout-text {
+      padding: 3rem 7rem 10rem 7rem;
+      text-align: -webkit-center;
     }
 
-    // Função para carregar as ações e exibir na lista
-    async function loadStocks() {
-      const stockList = document.getElementById("stock-list");
-      stockList.innerHTML = ""; // Limpa a lista
+    .color-bk {
+      background: #eeeeee30;
+    }
 
-      for (const ticker of tickers) {
-        const price = await getStockPrice(ticker);
-        if (price !== null) {
-          const listItem = document.createElement("li");
-          listItem.innerHTML = `
+    .h2text {
+      font-size: 22px;
+      font-weight: 400;
+      color: #fff;
+      letter-spacing: 1px;
+      height: 100px;
+      align-content: center;
+    }
+
+    h3 {
+      font-size: 25px;
+      color: #fff;
+    }
+
+    .layout-text ul {
+      padding: 0 10% 5% 10%;
+      justify-items: center;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3%;
+    }
+
+    ul li {
+      font-weight: 400;
+      color: #fff;
+      padding: 5px;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: linear-gradient(
+        175deg,
+        rgb(6 1 91 / 90%) 0%,
+        rgb(0 33 95 / 100%) 15%,
+        rgb(129 234 255 / 100%) 100%
+      );
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+    }
+
+    /* button */
+    .form {
+      display: grid;
+      flex-direction: column;
+      background: #606c88;
+      background: -webkit-linear-gradient(to right, #3f4c6b, #606c88);
+      background: linear-gradient(to right, #3f4c6b, #606c88);
+      padding: 20px;
+      max-width: 350px;
+      justify-content: center;
+      border-radius: 5px;
+      border: 2px solid #fff;
+      box-shadow: 4px 4px #fff;
+    }
+
+    .form input {
+      margin: 10px;
+      line-height: 1.5rem;
+      font-size: 0.875rem;
+      flex: 1 1 auto;
+      width: 250px;
+      height: 40px;
+      border-radius: 5px;
+      border: 2px solid #fff;
+      background-color: #eee;
+      box-shadow: 4px 4px #fff;
+      font-weight: 600;
+      color: #333;
+      padding: 5px 10px;
+      outline: none;
+    }
+
+    .form input::placeholder {
+      color: rgb(216, 212, 212);
+    }
+
+    .form input:focus {
+      border: 1px solid rgb(99 102 241);
+    }
+
+    .form button:hover {
+      box-shadow: 0 0 0 0 #fff;
+      transform: translate(3px, 3px);
+    }
+
+    .form span,
+    .form input {
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+
+    .form button {
+      transition: all 0.3s;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      padding: 0.625rem 0.875rem;
+      margin: 10px 40px 10px 40px;
+      height: 40px;
+      border-radius: 5px;
+      border: 2px solid #fff;
+      background-color: rgb(6 1 91 / 90%);
+      box-shadow: 4px 4px #fff;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .ul-res ul {
+      text-align: center;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .ul-res ul li {
+      margin-bottom: 10px;
+      max-width: 400px;
+    }
+
+    @media screen and (max-width: 768px) {
+      .ul-res ul {
+        text-align: center;
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
+  </style>
+
+  <body>
+    <header>
+      <h1>Investimento</h1>
+      <nav>
+        <ul>
+          <li><a href="/pages/chart.html">Gráficos</a></li>
+          <li><a href="/pages/invest.html">Investir</a></li>
+          <li><a href="#" onclick="logoutUsuario()">Sair</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <div class="layout-text">
+      <div id="balance" class="h2text">
+        <h2>Carregando saldo...</h2>
+      </div>
+      <ul id="stock-list"></ul>
+
+      <div class="ul-res" style="margin-top: 70px">
+        <h3>Ações Compradas</h3>
+        <ul id="shares-list"></ul>
+      </div>
+
+      <div class="ul-res" style="margin-top: 70px">
+        <h3 style="color: transparent">Investimentos Realizados</h3>
+        <ul>
+          <li id="investment-list"></li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      const apiKey = "3LcGDlYJGST1jXsimEjh8piuITsoW3Wm";
+      const tickers = ["AAPL", "NVDA", "AMZN", "GOOGL", "MSFT"];
+
+      // Função para buscar os preços das ações
+      async function getStockPrice(symbol) {
+        const url = `https://api.polygon.io/v2/aggs/ticker/${symbol}/prev?apiKey=${apiKey}`;
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+          if (data?.results?.[0]?.c) {
+            return data.results[0].c; // Preço de fechamento
+          }
+          return null;
+        } catch (error) {
+          console.error(`Erro ao buscar o preço de ${symbol}:`, error);
+          return null;
+        }
+      }
+
+      // Função para carregar as ações e exibir na lista
+      async function loadStocks() {
+        const stockList = document.getElementById("stock-list");
+        stockList.innerHTML = ""; // Limpa a lista
+
+        for (const ticker of tickers) {
+          const price = await getStockPrice(ticker);
+          if (price !== null) {
+            const listItem = document.createElement("li");
+            listItem.innerHTML = `
             <div class="form">
-              ${ticker} - Preço por ação: $${price.toFixed(2).replace('.', ',')}
+              ${ticker} - Preço por ação: $${price.toFixed(2).replace(".", ",")}
               <input type="hidden" id="price_${ticker}" value="${price}" />
               <input type="number" id="shares_${ticker}" placeholder="Número de ações" min="0" value="0" 
                 oninput="calculateInvestment('${ticker}', parseInt(this.value, 10))" />
@@ -212,17 +222,16 @@
               </button>
             </div>
           `;
-          stockList.appendChild(listItem);
+            stockList.appendChild(listItem);
+          }
         }
       }
-    }
 
-    document.addEventListener("DOMContentLoaded", async function() {
-      await loadStocks();
-      getSaldoUsuario();
-      fetchShares();
-    });
-  </script>
-</body>
-
+      document.addEventListener("DOMContentLoaded", async function () {
+        await loadStocks();
+        getSaldoUsuario();
+        fetchShares();
+      });
+    </script>
+  </body>
 </html>
