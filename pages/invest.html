@@ -143,9 +143,19 @@
     }
 
     @media screen and (max-width: 768px) {
-      .ul-res ul {
+      .ul-res ul,
+      .layout-text ul {
         text-align: center;
         grid-template-columns: repeat(1, 1fr);
+      }
+
+      .layout-text {
+        padding: 0 0 0 0;
+      }
+
+      .ul-res ul li,
+      ul li {
+        max-width: 300px;
       }
     }
   </style>
