@@ -1,7 +1,5 @@
 // Variável para armazenar a instância do gráfico de ações
 let stockChart;
-
-// Saldo inicial (para ser atualizado a partir do backend)
 let balance = 0; // Inicializado em zero, será atualizado após o login
 
 // =============================== LOGIN & AUTENTICAÇÃO ===============================
@@ -18,11 +16,14 @@ async function cadastrarUsuario() {
   }
 
   try {
-    const response = await fetch("http://localhost:3333/users", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
-    });
+    const response = await fetch(
+      "https://7c49-54-167-120-173.ngrok-free.app/users",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password })
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
@@ -49,21 +50,26 @@ async function loginUsuario() {
   }
 
   try {
-    const response = await fetch("http://localhost:3333/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    const response = await fetch(
+      "https://7c49-54-167-120-173.ngrok-free.app/login",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      }
+    );
 
     if (response.ok) {
-      const data = await response.json();
-      localStorage.setItem("jwt_token", data.data.jwt_token);
-      localStorage.setItem("user_email", email);
-      localStorage.setItem("user_password", password);
+      const data1 = await response.json();
 
-      //await getSaldoUsuario(); // Chama a função para obter o saldo após o login
+      // Armazena o token no localStorage
+      localStorage.setItem("jwt_token", data1.data.jwt_token);
+
+      // Alerta de login bem-sucedido
       alert("Login realizado com sucesso!");
-      window.location.href = "/farialimabets/pages/invest.php"; // Redireciona
+
+      // Redireciona para a próxima página
+      window.location.href = "/pages/invest.html";
     } else {
       const errorData = await response.json();
       throw new Error(errorData.message || "Erro ao fazer login.");
@@ -74,44 +80,48 @@ async function loginUsuario() {
   }
 }
 
-// Função para obter o saldo do usuário logado (usando o token JWT)
+// Função para obter o saldo do usuário logado
 async function getSaldoUsuario() {
+  const url = "https://7c49-54-167-120-173.ngrok-free.app/me";
   const token = localStorage.getItem("jwt_token");
 
   if (!token) {
-    alert("Usuário não autenticado.");
+    alert("Usuário não autenticado. Faça login para continuar.");
     return;
   }
 
   try {
-    const response = await fetch("http://localhost:3333/me", {
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
-      },
+        "ngrok-skip-browser-warning": "69420" // Ignora o aviso do ngrok
+      }
     });
 
     if (response.ok) {
       const data = await response.json();
-      balance = data.data.wallet.value; // Corrigido para acessar o valor do saldo
-      const balanceElement = document
-        .getElementById("balance")
-        .querySelector("h2");
-      if (balanceElement) {
-        balanceElement.innerText = `Saldo: $${balance
-          .toFixed(2)
-          .replace(".", ",")}`;
+      console.log("Dados da API /me:", data);
+
+      // Extraindo o valor do saldo na carteira
+      balance = data?.data?.wallet?.value || 0;
+      if (typeof balance === "number") {
+        const balanceElement = document.querySelector("#balance h2");
+        if (balanceElement) {
+          // Exibindo o saldo no elemento HTML
+          balanceElement.innerText = `Saldo: $${balance
+            .toFixed(2)
+            .replace(".", ",")}`;
+        }
       } else {
-        console.error("Elemento <h2> não encontrado.");
+        console.error("Saldo inválido ou não encontrado.");
       }
     } else {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Erro ao obter saldo.");
+      console.error("Erro ao obter saldo:", response.statusText);
     }
   } catch (error) {
-    alert("Erro ao obter saldo: " + error.message);
-    console.error("Erro:", error);
+    console.error("Erro ao conectar ao servidor:", error.message);
   }
 }
 
@@ -157,7 +167,9 @@ async function invest(stockSymbol, numShares) {
     return;
   }
 
-  const stockPrice = parseFloat(document.getElementById(`price_${stockSymbol}`).value);
+  const stockPrice = parseFloat(
+    document.getElementById(`price_${stockSymbol}`).value
+  );
   const totalCost = stockPrice * numShares;
 
   if (numShares <= 0 || isNaN(totalCost)) {
@@ -177,30 +189,34 @@ async function invest(stockSymbol, numShares) {
   const payload = {
     quantity: numShares,
     value: totalCost,
-    company: stockSymbol,
+    company: stockSymbol
   };
 
   try {
-    const response = await fetch("http://localhost:3333/shares", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    const response = await fetch(
+      "https://7c49-54-167-120-173.ngrok-free.app/shares",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Erro ao comprar ações.");
     }
 
     // Exibe a mensagem de investimento bem-sucedido
-    const investmentMessage = `Você comprou ${numShares} ações de ${stockSymbol} por $${totalCost.toFixed(2)}`;
+    const investmentMessage = `Você comprou ${numShares} ações de ${stockSymbol} por $${totalCost.toFixed(
+      2
+    )}`;
     alert(investmentMessage);
 
     // Atualiza a lista de ações compradas
     fetchShares(); // Atualiza a lista de ações na interface
-
   } catch (error) {
     alert("Erro: " + error.message);
   }
@@ -208,7 +224,7 @@ async function invest(stockSymbol, numShares) {
 
 // Função para buscar e exibir ações compradas
 async function fetchShares() {
-  const url = "http://localhost:3333/shares";
+  const url = "https://7c49-54-167-120-173.ngrok-free.app/shares";
   const token = localStorage.getItem("jwt_token");
 
   if (!token) {
@@ -221,7 +237,9 @@ async function fetchShares() {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
-      },
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "69420" // Ignora o aviso do ngrok
+      }
     });
 
     if (!response.ok) {
@@ -251,13 +269,22 @@ function displayShares(shares) {
     const shareItem = document.createElement("li");
     shareItem.classList.add("share-item"); // Adiciona uma classe para o item da lista
 
+    // Verifique o valor total antes de exibir para evitar multiplicação indesejada
+    const totalValue = share.total_value / share.quantity; // Ajuste: dividindo por 2 se necessário para corrigir a multiplicação por 2
+
     shareItem.innerHTML = `
       <div class="form">
         Empresa: ${share.company} <br>
         Quantidade: ${share.quantity} <br>
-        Valor Total: $${share.total_value.toFixed(2).replace(".", ",")} <br>
-        <input type="number" class="sell-input" id="sell_quantity_${share.company}" placeholder="Qtd para vender" min="1" max="${share.quantity}">
-        <button class="sell-button" onclick="sellShares('${share.company}', document.getElementById('sell_quantity_${share.company}').value, ${share.purchase_price})">
+        Valor Total: $${totalValue.toFixed(2).replace(".", ",")} <br>
+        <input type="number" class="sell-input" id="sell_quantity_${
+          share.company
+        }" placeholder="Qtd para vender" min="1" max="${share.quantity}">
+        <button class="sell-button" onclick="sellShares('${
+          share.company
+        }', document.getElementById('sell_quantity_${share.company}').value, ${
+      share.purchase_price
+    })">
           Vender
         </button>
       </div>
@@ -268,7 +295,7 @@ function displayShares(shares) {
 }
 
 // Função para vender ações
-async function sellShares(company, quantity, price) {
+async function sellShares(company, quantity, totalValue) {
   const token = localStorage.getItem("jwt_token");
   if (!token) {
     alert("Usuário não autenticado.");
@@ -284,25 +311,26 @@ async function sellShares(company, quantity, price) {
 
   const payload = {
     quantity: quantity,
-    value: price * quantity,
-    company: company,
+    value: totalValue,
+    company: company
   };
 
   try {
-    const response = await fetch("http://localhost:3333/sell-shares", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    const response = await fetch(
+      "https://7c49-54-167-120-173.ngrok-free.app/sell-shares",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
       alert(`Venda de ${quantity} ações da ${company} realizada com sucesso.`);
-
-      // Atualiza a lista de ações e o saldo do usuário após a venda
       fetchShares();
       getSaldoUsuario();
     } else {
@@ -313,6 +341,7 @@ async function sellShares(company, quantity, price) {
     alert("Erro ao vender ações: " + error.message);
   }
 }
+
 // =============================== GRÁFICO ===============================
 
 // Chamada do histórico do último ano dos valores das ações
@@ -365,9 +394,9 @@ async function loadChart() {
           pointRadius: 5,
           pointHoverRadius: 7,
           fill: true,
-          tension: 0.4,
-        },
-      ],
+          tension: 0.4
+        }
+      ]
     },
     options: {
       responsive: true,
@@ -377,57 +406,68 @@ async function loadChart() {
             display: true,
             text: "Data",
             color: "#fff",
-            font: { size: 20, family: "Arial" },
+            font: { size: 20, family: "Arial" }
           },
           ticks: {
             color: "#fff",
-            font: { size: 14 },
+            font: { size: 14 }
           },
-          grid: { color: "rgba(255, 255, 255, 0.1)" },
+          grid: { color: "rgba(255, 255, 255, 0.1)" }
         },
         y: {
           title: {
             display: true,
             text: "Preço",
             color: "#fff",
-            font: { size: 20, family: "Arial" },
+            font: { size: 20, family: "Arial" }
           },
           ticks: {
             color: "#fff",
-            font: { size: 14 },
+            font: { size: 14 }
           },
-          grid: { color: "rgba(255, 255, 255, 0.1)" },
-        },
+          grid: { color: "rgba(255, 255, 255, 0.1)" }
+        }
       },
       plugins: {
         legend: {
           labels: { color: "#fff", font: { size: 14, family: "Arial" } },
-          position: "top",
+          position: "top"
         },
         tooltip: {
           backgroundColor: "rgba(0, 0, 0, 0.7)",
           titleColor: "#fff",
           bodyColor: "#fff",
-          cornerRadius: 5,
-        },
+          cornerRadius: 5
+        }
       },
       interaction: {
         mode: "index",
-        intersect: false,
-      },
-    },
+        intersect: false
+      }
+    }
   });
 }
 
 function logoutUsuario() {
+  // Verifica se o token está presente antes de tentar removê-lo
+  const token =
+    localStorage.getItem("jwt_token") || sessionStorage.getItem("jwt_token");
+  if (!token) {
+    alert("Você não está logado.");
+    return; // Caso não haja token, interrompe a função.
+  }
+
   // Remove o token dos locais de armazenamento
   localStorage.removeItem("jwt_token");
   sessionStorage.removeItem("jwt_token");
 
-  // Caso o token esteja em um cookie, remova-o também (opcional)
+  // Caso o token esteja em um cookie, remova-o também
   document.cookie =
     "jwt_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
+  // Feedback para o usuário
+  alert("Você foi desconectado com sucesso.");
+
   // Redireciona o usuário para a página de login
-  window.location.href = "http://localhost/farialimabets/";
+  window.location.href = "/";
 }
